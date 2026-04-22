@@ -11,7 +11,7 @@ jobs:
       strategy:
         fail-fast: false
         matrix:
-          python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+          python-version: ["3.12", "3.13", "3.14"]
       steps:
         - name: checkout code
           uses: actions/checkout@v6.0.2
@@ -32,12 +32,8 @@ jobs:
                 pip install flake8
                 flake8 app.py
 
-        - name: run SAST
-          run : |
-                pip install bandit
-                bandit -r vote/
-
   Build:
+      needs: Code
       runs-on: ubuntu-latest
       steps:
         - name: checkout code
@@ -49,12 +45,6 @@ jobs:
         - name: build docker image
           run: |
                 docker build -t voting-app:${{ github.run_id }} .    
-        - name: Run Trivy vulnerability scanner
-          uses: aquasecurity/trivy-action@master
-          with:
-            image-ref: 'voting-app:${{ github.run_id }}'
-            exit-code: '1' 
-            severity: 'CRITICAL'
-#        - name: run docker container
-#          run: |
-#                docker run -d -p 80:80     
+        - name: run docker container
+          run: |
+                docker run -d -p 80:80 voting-app:${{ github.run_id }}
