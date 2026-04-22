@@ -50,4 +50,5 @@ def hello():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=80, debug=True, threaded=True)
+    host_ip = os.getenv('HOST_IP', '0.0.0.0')
+    app.run(host=host_ip, port=80, threaded=True)
