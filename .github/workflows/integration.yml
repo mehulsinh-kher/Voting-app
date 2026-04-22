@@ -45,7 +45,6 @@ jobs:
           uses: docker/build-push-action@v7.1.0
           with:
             context: .
-            file: ./dockerfile
             push: true
             tags: ${{ vars.DOCKERHUB_USER }}/voting-app:${{ github.workflow_sha }}
         - name: Run Hadolint
