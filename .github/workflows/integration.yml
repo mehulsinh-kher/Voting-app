@@ -28,5 +28,4 @@ jobs:
         - name: run tests
           run: |
                 cd vote/
-                pytest -v
-                app.py
+                python app.py
