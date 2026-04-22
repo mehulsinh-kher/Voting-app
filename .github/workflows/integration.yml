@@ -21,10 +21,12 @@ jobs:
             python-version: ${{ matrix.python-version }}
         - name: install dependencies
           run: |
+                cd vote/
                 python -m pip install --upgrade pip
                 pip install -r requirements.txt
 
         - name: run tests
           run: |
+                cd vote/
                 pytest -v
                 app.py
