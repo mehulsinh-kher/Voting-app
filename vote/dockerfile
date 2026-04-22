@@ -3,7 +3,7 @@ FROM python:latest-slim
 
 WORKDIR  /app
 
-COPY vote ./
+COPY . .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
