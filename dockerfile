@@ -1,5 +1,5 @@
 #testing my python app in docker
-FROM python:3.8-slim
+FROM python:latest-slim
 
 WORKDIR  /app
 
