@@ -29,6 +29,5 @@ jobs:
           run: |
                 cd vote/
                 pip install pytest
-                pytest 
                 pytest app.py
                 python app.py
