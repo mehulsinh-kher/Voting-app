@@ -41,16 +41,17 @@ jobs:
           with:
             username: ${{ vars.DOCKERHUB_USER }}
             password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+
         - name: build and push docker image
           uses: docker/build-push-action@v7.1.0
           with:
-            context: .
+            context: result/dockerfile
             push: true
             tags: ${{ vars.DOCKERHUB_USER }}/voting-app:${{ github.workflow_sha }}
         - name: Run Hadolint
           uses: hadolint/hadolint-action@v3.3.0
           with:
-           dockerfile: vote/dockerfile
-        - name: run docker container
-          run: |
-                docker run -d -p 80:80 voting-app:${{ github.workflow_sha }}
+           dockerfile: dockerfile
+           dockerfile-path: result/dockerfile
+        
