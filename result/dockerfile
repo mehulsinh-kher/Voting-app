@@ -3,12 +3,13 @@ FROM node:20-slim
 WORKDIR /app
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends curl tini && \
+    apt-get install -y --no-install-recommends curl \
+    apt-get install -y --no-install-recommends tini=0.19.0 && \
     rm -rf /var/lib/apt/lists/*
 
 COPY . ./
 
-RUN npm install -g nodemon 
+RUN npm install -g nodemon@3.1.14 
 
 EXPOSE 80
 
