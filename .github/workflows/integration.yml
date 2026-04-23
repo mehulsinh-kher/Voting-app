@@ -52,25 +52,12 @@ jobs:
         - name: checkout code
           uses: actions/checkout@v6.0.2
         - name: build and push docker image
-          uses: docker/build-push-action@v5
+          uses: docker/build-push-action@v7.1.0
           with:
-            context: ${{ matrix.context || format('./{0}', matrix.service) }}
-            
-            file: ${{ matrix.context || format('./{0}', matrix.service) }}/Dockerfile
-            
+            context: ./${{ matrix.service }}
+            file: ./${{ matrix.service }}/dockerfile
             push: true
-            
-            tags: |
-              ${{ vars.DOCKERHUB_USER }}/voting-${{ matrix.service }}:${{ github.sha }}
-              ${{ vars.DOCKERHUB_USER }}/voting-${{ matrix.service }}:latest
-        
-        #- name: build and push docker image
-        #  uses: docker/build-push-action@v7.1.0
-        #  with:
-        #    context: ./${{ matrix.service }}
-        #    file: ./${{ matrix.service }}/dockerfile
-        #    push: true
-        #    tags: ${{ vars.DOCKERHUB_USER }}/voting-app:${{ github.workflow_sha }}
+            tags: ${{ vars.DOCKERHUB_USER }}/voting-app:${{ github.workflow_sha }}
         - name: Run Hadolint
           uses: hadolint/hadolint-action@v3.3.0
           with:
