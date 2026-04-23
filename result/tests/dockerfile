@@ -1,0 +1,22 @@
+FROM node:20-slim
+
+WORKDIR /app
+
+COPY . .
+
+RUN apt-get update && apt-get install -y \
+    curl \
+    gnupg \
+    libnss3 \
+    libxss1 \
+    libasound2 \
+    libatk-bridge2.0-0 \
+    libgtk-3-0 \
+    libgbm1 \
+    postgresql-client \
+    --no-install-recommends \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN npm install puppeteer
+
+ENTRYPOINT [ "sh", "-c", "./tests.sh" ]

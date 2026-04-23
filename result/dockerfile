@@ -1,0 +1,20 @@
+FROM node:20-slim
+
+WORKDIR /app
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl tini && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY . ./
+
+RUN npm install -g nodemon 
+
+EXPOSE 80
+
+RUN npm ci && \
+    npm cache clean --force && \
+    mv /app/node_modules /node_modules
+
+ENTRYPOINT ["/usr/bin/tini", "--"]
+CMD ["node", "server.cjs"]
