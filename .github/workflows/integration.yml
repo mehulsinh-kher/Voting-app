@@ -46,7 +46,8 @@ jobs:
         - name: build and push docker image
           uses: docker/build-push-action@v7.1.0
           with:
-            context: result/dockerfile
+            context: ./result/
+            dockerfile: dockerfile
             push: true
             tags: ${{ vars.DOCKERHUB_USER }}/voting-app:${{ github.workflow_sha }}
         - name: Run Hadolint
