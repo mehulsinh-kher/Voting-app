@@ -40,7 +40,7 @@ jobs:
           matrix:
             service: ["vote", "result", "worker", "seed-data"]
             include:
-              - service: "integration-tests"
+              - service: "result/tests"
                 context: "./result/tests" 
       steps:
         - name: login docker
