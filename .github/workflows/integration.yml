@@ -36,8 +36,8 @@ jobs:
       needs: Code
       runs-on: ubuntu-latest
       strategy:
-      matrix:
-        service: [vote, result, worker]
+        matrix:
+        service: ["vote", "result", "worker"]
       steps:
         - name: login docker
           uses: docker/login-action@v4.1.0
