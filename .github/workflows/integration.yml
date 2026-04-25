@@ -83,6 +83,9 @@ jobs:
                 else
                   echo "No dockerfile found for ${{ matrix.service }}"
                 fi
+
+        - name: List files to see the truth
+          run: find . -maxdepth 3 -name "*ock*er*file*"
         - name: Run Hadolint
           uses: hadolint/hadolint-action@v3.3.0
           with:
