@@ -5,9 +5,9 @@ WORKDIR /app
 COPY . .
 
 RUN apk add --no-cache \
-    bash \
-    postgresql-client \
-    curl
+    bash~=5.2 \
+    postgresql16-client~=16 \
+    curl~=8
 
 
 
