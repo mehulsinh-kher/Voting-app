@@ -3,7 +3,7 @@ FROM python:3-slim
 WORKDIR  /app
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends apache2-utils=2.4.66-1~deb13u2 && \
+    apt-get install -y --no-install-recommends apache2-utils=2.4.58-1ubuntu8.11 && \
     rm -rf /var/lib/apt/lists/*
 
 COPY . .
