@@ -1,101 +1,101 @@
 #creating pipeline for integration testing
 name: voting
 on:
-  workflow_dispatch:  
-  #push:
-  #  branches: [main]
-  
+workflow_dispatch:  
+#push:
+#  branches: [main]
+
 jobs:
-  Code:
-      runs-on: ubuntu-latest
-      strategy:
+Code:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.13", "3.14"]
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v6.0.2
+      - name: set up python ${{ matrix.python-version }}
+        uses: actions/setup-python@v6.2.0
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: install dependencies
+        run: |
+              cd vote/
+              python -m pip install --upgrade pip
+              pip install -r requirements.txt
+
+
+      - name: run linter
+        run: |
+              cd vote/
+              pip install flake8
+              flake8 app.py
+
+Build:
+    needs: Code
+    runs-on: ubuntu-latest
+    strategy:
         fail-fast: false
         matrix:
-          python-version: ["3.12", "3.13", "3.14"]
-      steps:
-        - name: checkout code
-          uses: actions/checkout@v6.0.2
-        - name: set up python ${{ matrix.python-version }}
-          uses: actions/setup-python@v6.2.0
-          with:
-            python-version: ${{ matrix.python-version }}
-        - name: install dependencies
-          run: |
-                cd vote/
-                python -m pip install --upgrade pip
-                pip install -r requirements.txt
+          service: ["vote", "result", "worker", "seed-data"]
+          include:
+            - service: "result/tests"
+              context: "./result/tests" 
+    steps:
+      - name: login docker
+        uses: docker/login-action@v4.1.0
+        with:
+          username: ${{ vars.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: checkout code
+        uses: actions/checkout@v6.0.2
+      - name: build and push docker image
+        uses: docker/build-push-action@v7.1.0
+        with:
+          context: ./${{ matrix.service }}
+          file: ./${{ matrix.service }}/dockerfile
+          push: true
+          tags: ${{ vars.DOCKERHUB_USER }}/voting-app:${{ github.workflow_sha }}
 
-        - name: run linter
-          run: |
-                cd vote/
-                pip install flake8
-                flake8 app.py
-
-  Build:
-      needs: Code
-      runs-on: ubuntu-latest
-      strategy:
-          fail-fast: false
-          matrix:
-            service: ["vote", "result", "worker", "seed-data"]
-            include:
-              - service: "result/tests"
-                context: "./result/tests" 
-      steps:
-        - name: login docker
-          uses: docker/login-action@v4.1.0
-          with:
-            username: ${{ vars.DOCKERHUB_USER }}
-            password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-        - name: checkout code
-          uses: actions/checkout@v6.0.2
-        - name: build and push docker image
-          uses: docker/build-push-action@v7.1.0
-          with:
-            context: ./${{ matrix.service }}
-            file: ./${{ matrix.service }}/dockerfile
-            push: true
-            tags: ${{ vars.DOCKERHUB_USER }}/voting-app:${{ github.workflow_sha }}
-
-  Test:
-      needs:
-        - Build
-        - Code
-      runs-on: ubuntu-latest
-      strategy:
-          fail-fast: false
-          matrix:
-            service: ["vote", "result", "worker", "seed-data"]
-            include:
-              - service: "result/tests"
-                context: "./result/tests" 
-      steps:
-        - name: checkout code
-          uses: actions/checkout@v6.0.2
-        - name: Run Hadolint
-          uses: hadolint/hadolint-action@v3.3.0
-          with:
-           dockerfile: ${{ matrix.service }}/dockerfile
-
-
-           
-  push:
+Test:
     needs:
-      - test
-      runs-on: ubuntu-latest
-steps:
-        - name: login docker
-          uses: docker/login-action@v4.1.0
-          with:
-            username: ${{ vars.DOCKERHUB_USER }}
-            password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - Build
+      - Code
+    runs-on: ubuntu-latest
+    strategy:
+        fail-fast: false
+        matrix:
+          service: ["vote", "result", "worker", "seed-data"]
+          include:
+            - service: "result/tests"
+              context: "./result/tests" 
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v6.0.2
+      - name: Run Hadolint
+        uses: hadolint/hadolint-action@v3.3.0
+        with:
+         dockerfile: ${{ matrix.service }}/dockerfile
 
-        - name: checkout code
-          uses: actions/checkout@v6.0.2
-        - name: build and push docker image
-          uses: docker/build-push-action@v7.1.0
-          with:
-            dockerfile: docker-compose.yml
-      
+
+         
+push:
+needs:
+  - test
+  runs-on: ubuntu-latest
+  steps:
+    - name: login docker
+      uses: docker/login-action@v4.1.0
+      with:
+        username: ${{ vars.DOCKERHUB_USER }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: checkout code
+      uses: actions/checkout@v6.0.2
+    - name: build and push docker image
+      uses: docker/build-push-action@v7.1.0
+      with:
+        dockerfile: docker-compose.yml
+  
