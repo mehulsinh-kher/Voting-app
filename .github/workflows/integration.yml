@@ -58,6 +58,20 @@ jobs:
             file: ./${{ matrix.service }}/dockerfile
             push: true
             tags: ${{ vars.DOCKERHUB_USER }}/voting-app:${{ github.workflow_sha }}
+
+Test:
+      needs:
+        - Build
+        - Code
+      runs-on: ubuntu-latest
+      strategy:
+          fail-fast: false
+          matrix:
+            service: ["vote", "result", "worker", "seed-data"]
+            include:
+              - service: "result/tests"
+                context: "./result/tests" 
+      steps:
         - name: Run Hadolint
           uses: hadolint/hadolint-action@v3.3.0
           with:
