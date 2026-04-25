@@ -93,10 +93,6 @@ jobs:
       - name: checkout code
         uses: actions/checkout@v6.0.2
 
-      - name: build and push docker image
-        uses: docker/build-push-action@v7.1.0
-        with: 
-          context: .
-          file: docker-compose.yml
-          push: true
-          tags: ${{ vars.DOCKERHUB_USER }}/voting-app:latest
+      - name: push full image
+        run: |
+          docker compose -f docker-compose.yml push
