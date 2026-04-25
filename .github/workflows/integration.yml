@@ -72,6 +72,8 @@ jobs:
               - service: "result/tests"
                 context: "./result/tests" 
       steps:
+        - name: checkout code
+          uses: actions/checkout@v6.0.2
         - name: Run Hadolint
           uses: hadolint/hadolint-action@v3.3.0
           with:
