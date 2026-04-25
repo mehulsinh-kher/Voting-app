@@ -56,7 +56,7 @@ jobs:
           with:
             context: ./${{ matrix.service }}
             file: ./${{ matrix.service }}/dockerfile
-            push: true
+            push: false
             tags: ${{ vars.DOCKERHUB_USER }}/voting-app:${{ github.workflow_sha }}
 
   Test:
@@ -81,7 +81,7 @@ jobs:
 
 
   Push:
-    needs: Test
+#    needs: Test
     runs-on: ubuntu-latest
     steps:
       - name: login docker
