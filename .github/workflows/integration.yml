@@ -74,6 +74,15 @@ jobs:
       steps:
         - name: checkout code
           uses: actions/checkout@v6.0.2
+
+        - name: code checker
+          run: |
+                cd ./${{ matrix.service }}
+                if [ -f "dockerfile" ]; then
+                  hadolint ./${{ matrix.service }}/dockerfile
+                else
+                  echo "No dockerfile found for ${{ matrix.service }}"
+                fi
         - name: Run Hadolint
           uses: hadolint/hadolint-action@v3.3.0
           with:
