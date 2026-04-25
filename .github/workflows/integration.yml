@@ -95,4 +95,5 @@ jobs:
 
       - name: push full image
         run: |
-          docker compose -f docker-compose.yml push
+          docker compose build
+          docker compose push
