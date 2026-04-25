@@ -59,7 +59,7 @@ jobs:
             push: true
             tags: ${{ vars.DOCKERHUB_USER }}/voting-app:${{ github.workflow_sha }}
 
-Test:
+  Test:
       needs:
         - Build
         - Code
