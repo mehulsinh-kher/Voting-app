@@ -89,5 +89,5 @@ jobs:
         - name: Run Hadolint
           uses: hadolint/hadolint-action@v3.3.0
           with:
-           dockerfile: ./${{ matrix.service }}/dockerfile
+           dockerfile: ${{ matrix.service }}/dockerfile
         
