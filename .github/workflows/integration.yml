@@ -79,4 +79,4 @@ jobs:
             context: ./${{ matrix.service }}
             file: ./${{ matrix.service }}/dockerfile
             push: true
-            tags: ${{ vars.DOCKERHUB_USER }}/voting-app:${{ github.workflow_sha }}
+            tags: ${{ vars.DOCKERHUB_USER }}/voting-app:${{ matrix.service }}
