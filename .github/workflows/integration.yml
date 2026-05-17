@@ -1,4 +1,3 @@
-#creating pipeline for integration testing
 name: voting
 on:
   workflow_dispatch:  
@@ -53,7 +52,7 @@ jobs:
            dockerfile: ${{ matrix.service }}/dockerfile
 
 
- Build and Push:
+  build-and-push:
       needs:
         - Test 
         - Code
