@@ -39,7 +39,7 @@ jobs:
       strategy:
           fail-fast: false
           matrix:
-            service: ["vote", "result", "worker", "seed-data"]
+            service: ["vote", "result", "worker"]
             include:
               - service: "result/tests"
                 context: "./result/tests" 
