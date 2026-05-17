@@ -32,8 +32,31 @@ jobs:
                 pip install flake8
                 flake8 app.py
 
-  Build:
-      needs: Code
+  
+  Test:
+      needs:
+        - Code
+      runs-on: ubuntu-latest
+      strategy:
+          fail-fast: false
+          matrix:
+            service: ["vote", "result", "worker", "seed-data"]
+            include:
+              - service: "result/tests"
+                context: "./result/tests" 
+      steps:
+        - name: checkout code
+          uses: actions/checkout@v6.0.2
+        - name: Run Hadolint
+          uses: hadolint/hadolint-action@v3.3.0
+          with:
+           dockerfile: ${{ matrix.service }}/dockerfile
+
+
+ Build and Push:
+      needs:
+        - Test 
+        - Code
       runs-on: ubuntu-latest
       strategy:
           fail-fast: false
@@ -56,45 +79,5 @@ jobs:
           with:
             context: ./${{ matrix.service }}
             file: ./${{ matrix.service }}/dockerfile
-            push: false
+            push: true
             tags: ${{ vars.DOCKERHUB_USER }}/voting-app:${{ github.workflow_sha }}
-
-  Test:
-      needs:
-        - Build
-        - Code
-      runs-on: ubuntu-latest
-      strategy:
-          fail-fast: false
-          matrix:
-            service: ["vote", "result", "worker", "seed-data"]
-            include:
-              - service: "result/tests"
-                context: "./result/tests" 
-      steps:
-        - name: checkout code
-          uses: actions/checkout@v6.0.2
-        - name: Run Hadolint
-          uses: hadolint/hadolint-action@v3.3.0
-          with:
-           dockerfile: ${{ matrix.service }}/dockerfile
-
-
-  Push:
-#    needs: Test
-    runs-on: ubuntu-latest
-    steps:
-      - name: login docker
-        uses: docker/login-action@v4.1.0
-        with:
-          username: ${{ vars.DOCKERHUB_USER }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: checkout code
-        uses: actions/checkout@v6.0.2
-
-      - name: Building image
-        run: docker compose build voting-app
-
-      - name: Push the service image
-        run: docker compose push voting-app
