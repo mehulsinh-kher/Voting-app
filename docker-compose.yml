@@ -30,7 +30,7 @@ services:
 
 
   test:
-    build: ./result/tests/
+    build: ./tests/
     depends_on:
       - vote
       - result
