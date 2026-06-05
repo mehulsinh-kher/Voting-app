@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+
+metadata:
+  name: vote-app-service
+  namespace: voting-app
+
+spec:
+  selector:
+    app: voting-app-label
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP

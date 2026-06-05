@@ -1,0 +1,13 @@
+kind: Pod
+apiVersion: v1
+
+metadata:
+  name: vote-pod
+  namespace: voting-app
+
+spec:
+  containers:
+  - name: vote
+    image: mehulkher/voting-app:vote
+    ports:
+    - containerPort: 80
