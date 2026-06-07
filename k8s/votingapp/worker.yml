@@ -5,22 +5,42 @@ metadata:
   name: worker-deployment
   namespace: voting-app
   labels:
-    app: voting-app-label
+    app: worker
 
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: voting-app-label
+      app: worker
   
   template:
     metadata:
       labels:
-        app: voting-app-label
+        app: worker
 
     spec:
       containers:
-      - name: voting-app
+      - name: worker
         image: mehulkher/voting-app:worker
         ports:
         - containerPort: 80
+
+---
+kind: Service
+apiVersion: v1
+
+metadata:
+  name: worker-service
+  namespace: voting-app
+  labels:
+    app: worker
+
+spec:
+  type: NodePort
+  selector:
+    app: worker
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30082
+      protocol: TCP

@@ -8,7 +8,7 @@ metadata:
     app: voting-app-label
 
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: voting-app-label
@@ -34,10 +34,12 @@ metadata:
         app: voting-app-label
   namespace: voting-app
 spec:
+  type: NodePort
   selector:
     app: voting-app-label
   ports:
-  - port: 8080
+  - port: 80
     targetPort: 80
+    nodePort: 31000
     protocol: TCP
 

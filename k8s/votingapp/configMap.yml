@@ -6,4 +6,6 @@ metadata:
   namespace: voting-app 
 
 data:
+  POSTGRES_HOST: postgres-service
   POSTGRES_USER: postgres
+  POSTGRES_DB: postgres

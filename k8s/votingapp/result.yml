@@ -5,22 +5,40 @@ metadata:
   name: result-deployment
   namespace: voting-app
   labels:
-    app: voting-app-label
+    app: result
 
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: voting-app-label
+      app: result
   
   template:
     metadata:
       labels:
-        app: voting-app-label
+        app: result
 
     spec:
       containers:
-      - name: voting-app
+      - name: result
         image: mehulkher/voting-app:result
         ports:
-        - containerPort: 80
+        - containerPort: 4000
+
+---
+kind: Service
+apiVersion: v1
+
+metadata:
+  name: result-service
+  namespace: voting-app
+
+spec:
+  type: NodePort
+  selector:
+    app: result
+  ports:
+    - port: 4000
+      targetPort: 4000
+      nodePort: 30081
+      protocol: TCP
