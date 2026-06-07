@@ -1,0 +1,26 @@
+kind: Deployment
+apiVersion: apps/v1
+
+metadata:
+  name: worker-deployment
+  namespace: voting-app
+  labels:
+    app: voting-app-label
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: voting-app-label
+  
+  template:
+    metadata:
+      labels:
+        app: voting-app-label
+
+    spec:
+      containers:
+      - name: voting-app
+        image: mehulkher/voting-app:worker
+        ports:
+        - containerPort: 80

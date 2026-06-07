@@ -1,0 +1,43 @@
+kind: Deployment
+apiVersion: apps/v1
+
+metadata:
+  name: vote-app-deployment
+  namespace: voting-app
+  labels:
+    app: voting-app-label
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: voting-app-label
+  
+  template:
+    metadata:
+      labels:
+        app: voting-app-label
+
+    spec:
+      containers:
+      - name: voting-app
+        image: mehulkher/voting-app:vote
+        ports:
+        - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vote-service
+  labels:
+        app: voting-app-label
+  namespace: voting-app
+spec:
+  selector:
+    app: voting-app-label
+  ports:
+  - port: 8080
+    targetPort: 80
+    protocol: TCP
+

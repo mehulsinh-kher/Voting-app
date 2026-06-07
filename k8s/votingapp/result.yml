@@ -2,7 +2,7 @@ kind: Deployment
 apiVersion: apps/v1
 
 metadata:
-  name: vote-app-deployment
+  name: result-deployment
   namespace: voting-app
   labels:
     app: voting-app-label
@@ -21,6 +21,6 @@ spec:
     spec:
       containers:
       - name: voting-app
-        image: mehulkher/voting-app:vote
+        image: mehulkher/voting-app:result
         ports:
         - containerPort: 80
