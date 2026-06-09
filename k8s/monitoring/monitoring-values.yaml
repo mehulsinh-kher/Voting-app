@@ -1,0 +1,6 @@
+grafana:
+  defaultDashboardsEnabled: false
+
+  sidecar:
+    dashboards:
+      enabled: false

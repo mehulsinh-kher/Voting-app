@@ -1,0 +1,32 @@
+apiVersion: v1
+data:
+  grafana.ini: |
+    [analytics]
+    check_for_updates = true
+    [log]
+    mode = console
+    [paths]
+    data = /var/lib/grafana/
+    logs = /var/log/grafana
+    plugins = /var/lib/grafana/plugins
+    provisioning = /etc/grafana/provisioning
+    [server]
+    domain = ''
+    [unified_storage]
+    index_path = /var/lib/grafana-search/bleve
+kind: ConfigMap
+metadata:
+  annotations:
+    meta.helm.sh/release-name: monitoring
+    meta.helm.sh/release-namespace: monitoring
+  creationTimestamp: "2026-06-08T20:40:21Z"
+  labels:
+    app.kubernetes.io/instance: monitoring
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/version: 13.0.1-security-01
+    helm.sh/chart: grafana-12.4.2
+  name: monitoring-grafana
+  namespace: monitoring
+  resourceVersion: "284411"
+  uid: bf1b154c-33b2-4b61-80ce-0cac7d54c268
