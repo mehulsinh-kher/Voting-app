@@ -21,3 +21,5 @@ This isn't an example of a properly architected perfectly designed distributed a
 example of the various types of pieces and languages you might see (queues, persistent data, etc), and how to
 deal with them in Docker at a basic to advanced level.
 https://www.youtube.com/watch?v=fpc3cdpVc9M&list=RDlcw4TDMBjZA&index=8
+
+by mehul
